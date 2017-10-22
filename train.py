@@ -17,7 +17,9 @@ def train(model, config, session=None):
 
     # define summaries.
     summary_writer = tf.summary.FileWriter(config.log_dir, session.graph)
-    image_summary = tf.summary.image('generated images', model.G)
+    image_summary = tf.summary.image(
+        'generated images', model.G, max_outputs=8
+    )
     loss_summaries = tf.summary.merge([
         tf.summary.scalar('wasserstein distance', -model.c_loss),
         tf.summary.scalar('generator loss', model.g_loss),
@@ -68,7 +70,7 @@ def train(model, config, session=None):
 
                 # train the critic against the current generator and the data.
                 for _ in range(critic_update_ratio):
-                    zs = _sample_z(config)
+                    zs = _sample_z(config.batch_size, model.z_size)
                     _, c_loss = session.run(
                         [update_C, model.c_loss],
                         feed_dict={
@@ -79,7 +81,7 @@ def train(model, config, session=None):
                     session.run(clip_C)
 
                 # train the generator against the current critic.
-                zs = _sample_z(config)
+                zs = _sample_z(config.batch_size, model.z_size)
                 _, g_loss = session.run(
                     [update_G, model.g_loss],
                     feed_dict={model.z_in: zs}

@@ -101,5 +101,6 @@ ENV/
 .mypy_cache/
 
 logs/
+data/
 datasets/
 samples/

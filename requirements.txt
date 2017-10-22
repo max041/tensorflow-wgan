@@ -1,0 +1,15 @@
+# tensorflow
+tensorflow-gpu
+prettytensor
+
+# data
+scipy
+scikit-learn
+numpy
+pillow
+
+# utils
+colorama
+tqdm
+lmdb
+requests

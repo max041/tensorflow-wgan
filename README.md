@@ -93,7 +93,7 @@ $ ./data.py export_lsun
 #### Train
 ```
 $ tensorboard --logdir=logs &
-$ ./main.py --train --dataset=mnist [--resume]
+$ ./main.py --dataset=mnist [--resume]
 ```
 
 #### Test

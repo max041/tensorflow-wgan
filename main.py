@@ -12,6 +12,12 @@ flags = tf.app.flags
 flags.DEFINE_string('dataset', 'mnist', 'dataset to use {}'.format(
     DATASETS.keys()
 ))
+flags.DEFINE_bool('resize', True, 'whether to resize images on the fly or not')
+flags.DEFINE_bool(
+    'crop', True,
+    'whether to use crop for image resizing or not'
+)
+
 flags.DEFINE_integer('z_size', 100, 'size of latent code z [100]')
 flags.DEFINE_integer('image_size', 32, 'size of image [32]')
 flags.DEFINE_integer('channel_size', 1, 'size of channel [1]')
@@ -37,6 +43,10 @@ flags.DEFINE_float(
     'learning_rate', 0.00002,
     'learning rate for Adam [0.00002]'
 )
+flags.DEFINE_integer(
+    'critic_update_ratio', 2,
+    'number of updates for critic parameters per generator\'s updates'
+)
 flags.DEFINE_float('beta1', 0.5, 'momentum term of Adam [0.5]')
 flags.DEFINE_integer(
     'loss_log_interval', 30,
@@ -47,8 +57,8 @@ flags.DEFINE_integer(
     'number of batches per logging sample images'
 )
 flags.DEFINE_integer(
-    'critic_update_ratio', 2,
-    'number of updates for critic parameters per generator\'s updates'
+    'checkpoint_interval', 5000,
+    'number of batches per checkpoints'
 )
 
 flags.DEFINE_bool('test', False, 'flag defining whether it is in test mode')
@@ -57,12 +67,6 @@ flags.DEFINE_string('log_dir', 'logs', 'directory of summary logs')
 flags.DEFINE_string('sample_dir', 'figures', 'directory of generated figures')
 flags.DEFINE_string(
     'checkpoint_dir', 'checkpoints', 'directory of model checkpoints'
-)
-
-flags.DEFINE_bool('resize', True, 'whether to resize images on the fly or not')
-flags.DEFINE_bool(
-    'crop', True,
-    'whether to use crop for image resizing or not'
 )
 
 

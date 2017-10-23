@@ -25,7 +25,7 @@ def train(model, config, session=None):
         tf.summary.scalar('generator loss', model.g_loss),
     ])
 
-    # define optimizers and a model saver.
+    # define optimizers.
     C_traner = tf.train.AdamOptimizer(
         learning_rate=config.learning_rate,
         beta1=config.beta1

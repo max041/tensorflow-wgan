@@ -5,6 +5,13 @@ TensorFlow implementation of [Wasserstein GAN, arxiv:1701:07875](https://arxiv.o
 ![gradients-of-wgan](./arts/wgan.png)
 
 
+## Results
+
+Generated bedroom images from the LSUN trained model (only trained 0.6 epoch).
+
+<img src="./arts/1.png" width="110"> <img src="./arts/2.png" width="110"> <img src="./arts/3.png" width="110"> <img src="./arts/4.png" width="110"> <img src="./arts/5.png" width="110"><img src="./arts/6.png" width="110">
+
+
 ## Installation
 
 ```

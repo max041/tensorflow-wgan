@@ -29,7 +29,7 @@ flags.DEFINE_integer(
     'c_filter_number', 64,
     'number of critic\'s filters at the first conv layer'
 )
-flags.DEFINE_integer('g_filter_size', 3, 'generator\'s filter size')
+flags.DEFINE_integer('g_filter_size', 4, 'generator\'s filter size')
 flags.DEFINE_integer('c_filter_size', 3, 'discriminator\'s filter size')
 flags.DEFINE_float(
     'clip_size', 0.01,

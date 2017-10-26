@@ -186,4 +186,7 @@ class WGAN(object):
             scope='c_out'
         )
 
-        return tf.nn.tanh(c_out), c_out
+        return (
+            (tf.nn.tanh(c_out), c_out) if self.channel_size > 1 else
+            (tf.nn.sigmoid(c_out), c_out)
+        )

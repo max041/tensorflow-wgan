@@ -4,7 +4,7 @@ import pprint
 import tensorflow as tf
 from data import DATASETS
 from model import WGAN
-from train import train
+from train import train, train_original
 import utils
 
 
@@ -69,6 +69,10 @@ flags.DEFINE_string(
     'checkpoint_dir', 'checkpoints', 'directory of model checkpoints'
 )
 
+flags.DEFINE_string('critic_dump_to', None, 'Dump full step of critic training into specified dir.')
+flags.DEFINE_string('generator_dump_to', None, 'Dump full step of generator training into specified dir.')
+flags.DEFINE_string('execution_graph_dump_to', None, 'Dump full execution graph into specified dir.')
+flags.DEFINE_bool('use_original_algorithm', False, 'Train with algorithm proposed `Wasserstein GAN` paper.')
 
 FLAGS = flags.FLAGS
 
@@ -113,6 +117,8 @@ def main(_):
             print('=> generated test figures for {} at {}'.format(
                 wgan.name, os.path.join(FLAGS.sample_dir, name)
             ))
+    elif FLAGS.use_original_algorithm:
+        train_original(wgan, FLAGS)
     else:
         train(wgan, FLAGS)
 

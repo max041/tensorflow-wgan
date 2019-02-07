@@ -101,9 +101,9 @@ def image_dataset_length(dirpath):
 @_dataset('mnist', image_size=32, channel_size=1)
 def mnist_dataset(batch_size, test=False):
     if test:
-        fname_img = './data/mnist/val/t10k-images-idx3-ubyte'
+        fname_img = '../data/mnist/val/t10k-images-idx3-ubyte'
     else:
-        fname_img = './data/mnist/train/train-images-idx3-ubyte'
+        fname_img = '../data/mnist/train/train-images-idx3-ubyte'
 
     with open(fname_img, 'rb') as fd:
         magic, num, rows, cols = struct.unpack('>IIII', fd.read(16))
@@ -126,9 +126,9 @@ def mnist_dataset(batch_size, test=False):
 
 def mnist_dataset_length(test=False):
     if test:
-        fname_img = './data/mnist/val/t10k-images-idx3-ubyte'
+        fname_img = '../data/mnist/val/t10k-images-idx3-ubyte'
     else:
-        fname_img = './data/mnist/train/train-images-idx3-ubyte'
+        fname_img = '../data/mnist/train/train-images-idx3-ubyte'
 
     with open(fname_img, 'rb') as fd:
         magic, num, rows, cols = struct.unpack('>IIII', fd.read(16))
@@ -138,7 +138,7 @@ def mnist_dataset_length(test=False):
 @_dataset('lsun', image_size=64, channel_size=3)
 def lsun_dataset(batch_size,
                  test=False, resize=True, use_crop=False):
-    path = './data/lsun/val' if test else './data/lsun/train'
+    path = '../data/lsun/val' if test else '../data/lsun/train'
     if resize:
         return image_dataset(
             batch_size, path,
@@ -151,7 +151,7 @@ def lsun_dataset(batch_size,
 
 
 def lsun_dataset_length(test=False):
-    path = './data/lsun/val' if test else './data/lsun/train'
+    path = '../data/lsun/val' if test else '../data/lsun/train'
     return image_dataset_length(path)
 
 
@@ -178,8 +178,8 @@ def export_lsun(args):
     with utils.log(
             'export lsun images from mdb file',
             'exported lsun images from mdb file'):
-        _export_mdb_images('./data/lsun/train', size=args.size)
-        _export_mdb_images('./data/lsun/val', size=args.size)
+        _export_mdb_images('../data/lsun/train', size=args.size)
+        _export_mdb_images('../data/lsun/val', size=args.size)
 
 
 parser = argparse.ArgumentParser(description='Data pre/post processing CLI')

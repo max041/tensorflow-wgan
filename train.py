@@ -3,7 +3,6 @@ import tensorflow as tf
 from tqdm import tqdm
 import utils
 from data import DATASETS, DATASET_LENGTH_GETTERS
-import math
 
 
 def _sample_z(sample_size, z_size):

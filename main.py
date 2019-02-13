@@ -6,6 +6,8 @@ from data import DATASETS
 from model import WGAN
 from train import train, train_original
 import utils
+import random
+import numpy as np
 
 
 flags = tf.app.flags
@@ -69,10 +71,30 @@ flags.DEFINE_string(
     'checkpoint_dir', 'checkpoints', 'directory of model checkpoints'
 )
 
+# misc
+flags.DEFINE_integer('seed', 0, 'Set seed when seed>0.')
 flags.DEFINE_string('critic_dump_to', None, 'Dump full step of critic training into specified dir.')
 flags.DEFINE_string('generator_dump_to', None, 'Dump full step of generator training into specified dir.')
 flags.DEFINE_string('execution_graph_dump_to', None, 'Dump full execution graph into specified dir.')
 flags.DEFINE_bool('use_original_algorithm', False, 'Train with algorithm proposed `Wasserstein GAN` paper.')
+
+# Flags quantization manager.
+from tf_quantizer.utils import *
+flags.DEFINE_bool(name='dump', default=False, help='Dump tensors.')
+flags.DEFINE_bool(name='audit', default=False, help='Print detailed information about ops overriding.')
+flags.DEFINE_list(name='trunc', default=[],
+                  help='Truncate to bfloat inputs to the ops selected from the list:\n' + ' '.join(
+                      [s + '_{io}' for s in args_for_trunc]) + '\n Where \'i\' truncates inputs and \'o\' truncates outputs.')
+flags.DEFINE_list(name='hw_accurate', default=[],
+                  help='HW accurate operations from the list:\n' + ' '.join(args_for_hw))
+flags.DEFINE_list(name='special', default=[],
+                  help="Ops which aren't hw accurate but do more than only truncation:\n" + ' '.join(
+                      args_for_special) + "\nInternaly softmax can use LUTs, but all computations will be done in fp32.")
+flags.DEFINE_list(name='disable_softmax_lut', default=[],
+                  help='Disable LUTs in softmax which will be used with bfloat implemenation:\n' + ' '.join(
+                      args_for_disable_softmax_lut))
+flags.DEFINE_bool(name='enable_softmax_ew_trunc', default=False,
+                  help="Enable truncation of element-wise operations in softmax.")
 
 FLAGS = flags.FLAGS
 
@@ -91,6 +113,20 @@ def _patch_flags_with_dataset_configuration(flags_):
 
 def main(_):
     global FLAGS
+
+    # Set seed if need.
+    if FLAGS.seed > 0:
+        random.seed(FLAGS.seed)
+        np.random.seed(FLAGS.seed)
+        tf.set_random_seed(FLAGS.seed)
+
+    # Initialize quantization manager.
+    from tf_quantizer.quantization_manager import QuantizationManager as qm
+    keys = ['dump', 'audit', 'trunc', 'hw_accurate', 'special', 'disable_softmax_lut', 'enable_softmax_ew_trunc']
+    qargs = {}
+    for key in keys:
+        qargs[key] = FLAGS[key].value
+    qm(qargs=qargs).add_quantization()
 
     # patch and display flags with dataset's width and height
     FLAGS = _patch_flags_with_dataset_configuration(FLAGS)
